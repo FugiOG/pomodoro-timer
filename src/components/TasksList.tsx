@@ -24,12 +24,14 @@ const TasksList: FC = () => {
         dispatch(setTasks(savedList))
         const savedActive = localStorage.getItem('activeId') || ''
         dispatch(toggleActiveTaskId(savedActive))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
       }, [])
     
     useEffect(() => {
         initActiveTask()
         localStorage.setItem('tasksList', JSON.stringify(tasksList))
         localStorage.setItem('activeId', activeTaskId)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tasksList, activeTaskId])
 
       

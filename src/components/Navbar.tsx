@@ -1,5 +1,6 @@
 import React, { FC, useState } from 'react'
-import SettingsModal from './SettingsModal'
+import Modal from './Modal'
+import TimerSettings from './TimerSettings'
 
 const Navbar: FC = () => {
   const [showSettings, setShowSettings] = useState<boolean>(false)
@@ -16,7 +17,10 @@ const Navbar: FC = () => {
               </ul>
           </div>
       </nav>
-      <SettingsModal/>
+      <Modal setActive={setShowSettings} active={showSettings}>
+        <TimerSettings setActive={setShowSettings}/>
+      </Modal>
+
     </>
   )
 }

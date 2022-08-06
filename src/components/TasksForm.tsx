@@ -1,9 +1,8 @@
 import classNames from 'classnames';
-import React, { FC, useState, FocusEvent } from 'react'
+import React, { FC, useState } from 'react'
 import { ITask } from '../types';
 import { v4 as uuidv4 } from 'uuid';
 import { useAppDispatch } from '../hooks/useAppDispatch';
-import { useAppSelector } from '../hooks/useAppSelector';
 import { addTask } from '../store/slices/tasksSlice';
 
 const TasksForm: FC = () => {

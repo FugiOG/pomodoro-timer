@@ -2,16 +2,15 @@ import React, { FC, useEffect, useState } from 'react'
 import { useAppDispatch } from '../hooks/useAppDispatch';
 import { useAppSelector } from '../hooks/useAppSelector';
 import { getPadTime } from '../services/getPadTime';
-import { increaseAct } from '../store/slices/tasksSlice';
+import { increaseAct, setTime } from '../store/slices/tasksSlice';
 import {Helmet} from 'react-helmet';
 import useSound from 'use-sound';
 import clockSound from '../sounds/alarm_clock_sound.mp3';
 import timerPng from '../images/timer.png';
-import SettingsModal from './SettingsModal';
 
 const Timer: FC = () => {
     const {activeTaskId, tasksList, time} = useAppSelector(state => state.tasks)
-
+    
     const [timeLeft, setTimeLeft] = useState<number>(time)
     const [isCounting, setIsCounting] = useState<boolean>(false) 
     const [numberOfPomos, setNumberOfPomos] = useState<number>(1)
@@ -24,9 +23,9 @@ const Timer: FC = () => {
 
     const sendNotification = (title: string, body?: string) => {
         Notification.requestPermission().then((permission) => {
-            console.log(permission);
+            // console.log(permission);
             if (permission === "granted") {
-                const notification = new Notification(title, {
+                new Notification(title, {
                     body: body || title,
                     icon: timerPng
                 });
@@ -34,9 +33,18 @@ const Timer: FC = () => {
         });
     }
 
+    useEffect(() => {
+        const storageTime = localStorage.getItem('time') || 25 * 30
+        dispatch(setTime(+storageTime))
+    }, [])
 
-    const minutes: number = Math.floor(timeLeft / 60)
-    const seconds: number = timeLeft - minutes * 60
+    useEffect(() => {
+        setTimeLeft(time)
+        localStorage.setItem('time', time.toString())
+    }, [time])
+
+    let minutes: number = Math.floor(timeLeft / 60)
+    let seconds: number = timeLeft - minutes * 60
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -47,21 +55,22 @@ const Timer: FC = () => {
             setIsCounting(false)
             play()
             setNumberOfPomos(prev => prev + 1)
-            setTimeLeft(25 * 60)
+            setTimeLeft(time)
             dispatch(increaseAct(activeTaskId))
             sendNotification("It's time to take a break!")
         }
-        if (timeLeft === 300){
+        if (timeLeft === 300 && time > 300){
             sendNotification("5 minutes left!")
         }
 
         return () => {
             clearInterval(intervalId)
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [timeLeft, isCounting])
 
     const handleStart = () => {
-        if (timeLeft === 0) setTimeLeft(25 * 60)
+        if (timeLeft === 0) setTimeLeft(time)
         setIsCounting(true)
     }
     const handleStop = () => {
@@ -72,7 +81,7 @@ const Timer: FC = () => {
         setIsCounting(false)
         setNumberOfPomos(prev => prev + 1)
         dispatch(increaseAct(activeTaskId))
-        setTimeLeft(25 * 60)
+        setTimeLeft(time)
     }
 
     return (
