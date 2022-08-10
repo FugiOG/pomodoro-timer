@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, FocusEvent, useState } from 'react'
 import { useAppDispatch } from '../hooks/useAppDispatch'
 import { useAppSelector } from '../hooks/useAppSelector'
 import classNames from 'classnames'
@@ -36,30 +36,39 @@ const TaskEdit: FC<{editingId: string, onCancel: () => void}> = ({editingId, onC
     }
     
     const increaseQuantity = () => {
-        setNewQuantity(prev => prev + 1)
-      }
+        setNewQuantity(prev => prev  + 1)
+    }
     
-      const decreaseQuantity = () => {
-        if (quantity > 0){
-          setNewQuantity(prev => prev - 1)
+    const decreaseQuantity = () => {
+        if (newQuantity > 0){
+            setNewQuantity(prev => prev - 1)
         }
-      }
+    }
+
+    
+    // const onStopHandle = (event: FocusEvent<HTMLDivElement>) => {
+    //     console.log(event.target.classList);
+    //     if (event.target.classList.contains('add-task-form')){
+    //         return
+    //     }
+    //     onCancel()
+    // }
 
     return (
         <div className='add-task-form' tabIndex={1}>
             <form>
-            <input type="text" className='browser-default task-title' placeholder='What are you working on?' value={newTitle} onChange={(e) => setNewTitle(e.target.value)}/>
-            <p className='est'>Act / Est Pomodoros</p>
-            <div className="task-est gap-1">
-                <input type="number" className='browser-default edit-form-act' min='0' step='1' value={newAct} onChange={(e) => setNewAct(+e.target.value)}/>
-                <input type="number" className='browser-default' min='0' step='1' value={newQuantity} onChange={(e) => setNewQuantity(+e.target.value)}/>
-                <i className="material-icons btn non-copyable" onChange={increaseQuantity}>arrow_drop_up</i>
-                <i className="material-icons btn non-copyable" onChange={decreaseQuantity}>arrow_drop_down</i>
-            </div>
-            {(newDescription || shouldDescription) ? 
-                <textarea placeholder='Some notes...' className='description' value={newDescription} onChange={(e) => setNewDescription(e.target.value)} />
-                :
-                <button className='browser-default add-note-btn' onClick={() => setShouldDescription(true)}>+Add Note</button>}
+                <input type="text" className='browser-default task-title' placeholder='What are you working on?' value={newTitle} onChange={(e) => setNewTitle(e.target.value)}/>
+                <p className='est'>Act / Est Pomodoros</p>
+                <div className="task-est gap-1">
+                    <input type="number" className='browser-default edit-form-act' min='0' step='1' value={newAct} onChange={(e) => setNewAct(+e.target.value)}/>
+                    <input type="number" className='browser-default' min='0' step='1' value={newQuantity} onChange={(e) => setNewQuantity(+e.target.value)}/>
+                    <i className="material-icons btn non-copyable" onClick={increaseQuantity}>arrow_drop_up</i>
+                    <i className="material-icons btn non-copyable" onClick={decreaseQuantity}>arrow_drop_down</i>
+                </div>
+                {(newDescription || shouldDescription) ? 
+                    <textarea placeholder='Some notes...' className='description' value={newDescription} onChange={(e) => setNewDescription(e.target.value)} />
+                    :
+                    <button className='browser-default add-note-btn' onClick={() => setShouldDescription(true)}>+Add Note</button>}
             </form>
             <div className='bottom-form-btn'>
                 <button className='remove-btn' onClick={() => dispatch(removeTask(id))}>delete</button>

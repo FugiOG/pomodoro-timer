@@ -34,7 +34,7 @@ const Timer: FC = () => {
     }
 
     useEffect(() => {
-        const storageTime = localStorage.getItem('time') || 25 * 30
+        const storageTime = localStorage.getItem('time') || 25 * 60
         dispatch(setTime(+storageTime))
     }, [])
 
@@ -86,6 +86,9 @@ const Timer: FC = () => {
 
     return (
         <>
+            <Helmet>
+                <title>{getPadTime(minutes)}:{getPadTime(seconds)} - {taskName}</title>
+            </Helmet>
             <div className='timer-wrap'>
                 <div className="timer">
                     <span>{getPadTime(minutes)} : {getPadTime(seconds)}</span>
@@ -105,9 +108,6 @@ const Timer: FC = () => {
                 <div className="number">#{numberOfPomos}</div>
                 <div className='name'>{taskName}</div>
             </div>
-            <Helmet>
-                <title>{getPadTime(minutes)}:{getPadTime(seconds)} - {taskName}</title>
-            </Helmet>
         </>
     )
 }

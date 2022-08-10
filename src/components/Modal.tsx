@@ -1,4 +1,4 @@
-import React, { FC, PropsWithChildren, ReactNode } from 'react'
+import React, { FC, PropsWithChildren } from 'react'
 import classNames from 'classnames'
 
 interface Props extends PropsWithChildren {

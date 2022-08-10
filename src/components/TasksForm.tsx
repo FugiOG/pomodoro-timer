@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { FC, useState } from 'react'
+import React, { FC, FocusEvent, useState } from 'react'
 import { ITask } from '../types';
 import { v4 as uuidv4 } from 'uuid';
 import { useAppDispatch } from '../hooks/useAppDispatch';
